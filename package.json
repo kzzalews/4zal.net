@@ -1,0 +1,26 @@
+{
+  "name": "4zal-net",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal site of Karol Zalewski — engineer at Dynatrace, GitOps, self-hosted AI",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "deploy": "npm run build && bash scripts/deploy.sh"
+  },
+  "dependencies": {
+    "astro": "^5.14.0",
+    "@astrojs/rss": "^4.0.0",
+    "@astrojs/sitemap": "^3.0.0",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0"
+  }
+}

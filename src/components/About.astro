@@ -1,0 +1,73 @@
+---
+import { UI, type Lang } from '../consts';
+import { getEntry, render } from 'astro:content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = UI[lang];
+
+const entry = await getEntry('about', lang);
+if (!entry) {
+  throw new Error(`Missing about entry for lang: ${lang}`);
+}
+const { Content } = await render(entry);
+---
+
+<section id="about" class="max-w-3xl mx-auto px-6 py-16 sm:py-20 scroll-mt-20">
+  <p class="font-mono text-xs uppercase tracking-widest text-zinc-500 dark:text-zinc-500 mb-3">
+    → /about
+  </p>
+  <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+    {entry.data.title}
+  </h2>
+  <p class="mt-4 text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed">
+    {t['about.lead']}
+  </p>
+
+  <div class="mt-8 prose prose-zinc dark:prose-invert max-w-2xl">
+    <Content />
+  </div>
+</section>
+
+<style>
+  /* Custom typography for markdown content */
+  .prose p {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    line-height: 1.7;
+    color: rgb(82 82 91);
+  }
+  :global(.dark) .prose p {
+    color: rgb(212 212 216);
+  }
+  .prose a {
+    color: rgb(24 24 27);
+    text-decoration: underline;
+    text-decoration-color: rgb(228 228 231);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s;
+  }
+  .prose a:hover {
+    text-decoration-color: rgb(24 24 27);
+  }
+  :global(.dark) .prose a {
+    color: rgb(244 244 245);
+    text-decoration-color: rgb(63 63 70);
+  }
+  :global(.dark) .prose a:hover {
+    text-decoration-color: rgb(244 244 245);
+  }
+  .prose strong {
+    font-weight: 600;
+    color: rgb(24 24 27);
+  }
+  :global(.dark) .prose strong {
+    color: rgb(244 244 245);
+  }
+  .prose em {
+    font-style: italic;
+  }
+</style>

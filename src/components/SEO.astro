@@ -1,0 +1,88 @@
+---
+/**
+ * SEO component — head meta, Open Graph, Twitter Card, JSON-LD.
+ * Use on every page.
+ */
+import { SITE, META, type Lang } from '../consts';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article' | 'profile';
+}
+
+const { lang, title, description, image, type = 'website' } = Astro.props;
+
+// Resolve title/description with fallback
+const meta = META[lang];
+const finalTitle = title ?? meta.title;
+const finalDescription = description ?? meta.description;
+const finalImage = image ?? SITE.ogImage;
+const canonicalURL = new URL(Astro.url.pathname, SITE.url).toString();
+const ogImageURL = new URL(finalImage, SITE.url).toString();
+
+// JSON-LD Person (schema.org)
+const personLD = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.author.name,
+  alternateName: SITE.author.alternateName,
+  jobTitle: SITE.author.jobTitle,
+  worksFor: {
+    '@type': 'Organization',
+    name: SITE.author.employer,
+  },
+  url: SITE.author.url,
+  email: SITE.author.email.replace('mailto:', ''),
+  sameAs: SITE.author.sameAs,
+  description: finalDescription,
+};
+
+// Alternate language versions
+const alts = [
+  { lang: 'en', href: new URL(Astro.url.pathname.replace(/^\/pl/, ''), SITE.url).toString() },
+  { lang: 'pl', href: new URL(`/pl${Astro.url.pathname.replace(/^\/pl/, '')}`, SITE.url).toString() },
+];
+---
+
+<!-- Charset & viewport -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Primary Meta -->
+<title>{finalTitle}</title>
+<meta name="description" content={finalDescription} />
+<meta name="author" content={SITE.author.name} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Language alternates -->
+{alts.map(({ lang: l, href }) => (
+  <link rel="alternate" hreflang={l} href={href} />
+))}
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={SITE.author.name} />
+<meta property="og:title" content={finalTitle} />
+<meta property="og:description" content={finalDescription} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:locale" content={lang === 'pl' ? 'pl_PL' : 'en_US'} />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={finalTitle} />
+<meta name="twitter:description" content={finalDescription} />
+<meta name="twitter:image" content={ogImageURL} />
+
+<!-- JSON-LD Person -->
+<script type="application/ld+json" set:html={JSON.stringify(personLD)} />
+
+<!-- Theme color (will be overridden by dark mode toggle) -->
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+
+<!-- Generator -->
+<meta name="generator" content={Astro.generator} />

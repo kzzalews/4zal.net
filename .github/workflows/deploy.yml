@@ -1,0 +1,84 @@
+name: Deploy to 4zal.net (Mikrus Cytrus)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build & deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Astro
+        run: npm run build
+
+      - name: Setup SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          known_hosts: ${{ secrets.DEPLOY_SSH_KNOWN_HOSTS }}
+
+      - name: Verify SSH connectivity
+        run: |
+          ssh -o StrictHostKeyChecking=accept-new \
+              ${{ secrets.DEPLOY_SSH_USER }}@${{ secrets.DEPLOY_SSH_HOST }} \
+              "echo 'SSH OK'"
+
+      - name: Deploy via rsync + sudo
+        env:
+          REMOTE: ${{ secrets.DEPLOY_SSH_USER }}@${{ secrets.DEPLOY_SSH_HOST }}
+        run: |
+          STAGING="/tmp/4zal-net-staging-$RANDOM"
+          ssh "$REMOTE" "mkdir -p $STAGING"
+          rsync -az --delete \
+            --exclude='.well-known/' \
+            --exclude='@*' \
+            --exclude='*.asc' \
+            --exclude='.htaccess' \
+            dist/ "$REMOTE:$STAGING/"
+          ssh "$REMOTE" "sudo -n -u cytrus rsync -a --delete \
+            --exclude='.well-known' \
+            --exclude='@*' \
+            --exclude='*.asc' \
+            --exclude='.htaccess' \
+            $STAGING/ /cytrus/4zal.net/ && \
+            sudo -n -u cytrus rm -rf $STAGING"
+
+      - name: Verify deployment
+        run: |
+          sleep 3
+          curl -sIL https://4zal.net/ | head -10
+          echo ""
+          curl -sIL https://4zal.net/.well-known/webfinger | head -10
+          echo ""
+          curl -sIL https://4zal.net/@karol.zalewski | head -10
+
+      - name: Notify on failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "❌ Deploy 4zal.net failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+        continue-on-error: true

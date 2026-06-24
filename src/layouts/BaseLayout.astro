@@ -1,0 +1,45 @@
+---
+/**
+ * BaseLayout — wspólny layout dla wszystkich stron.
+ * - <SEO /> component w <head>
+ * - Nav z przełącznikiem języka i motywu
+ * - <slot /> dla treści strony
+ * - Footer
+ */
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, type Lang } from '../consts';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+}
+
+const { lang, title, description } = Astro.props;
+const otherLang = lang === 'en' ? 'pl' : 'en';
+const otherLangUrl = lang === 'en' ? '/pl/' : '/';
+---
+
+<!DOCTYPE html>
+<html lang={lang} class="scroll-smooth">
+  <head>
+    <SEO lang={lang} title={title} description={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="min-h-screen flex flex-col bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-zinc-900 focus:px-4 focus:py-2 focus:rounded">
+      Skip to content
+    </a>
+
+    <Nav lang={lang} otherLang={otherLang} otherLangUrl={otherLangUrl} />
+
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+
+    <Footer lang={lang} />
+  </body>
+</html>

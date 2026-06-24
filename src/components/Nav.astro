@@ -1,0 +1,52 @@
+---
+/**
+ * Nav — top navigation with language switch and theme toggle.
+ * Theme is handled via localStorage + prefers-color-scheme.
+ */
+import ThemeToggle from './ThemeToggle.astro';
+import { UI, type Lang } from '../consts';
+
+interface Props {
+  lang: Lang;
+  otherLang: Lang;
+  otherLangUrl: string;
+}
+
+const { lang, otherLang, otherLangUrl } = Astro.props;
+const t = UI[lang];
+---
+
+<header class="sticky top-0 z-40 backdrop-blur bg-white/80 dark:bg-zinc-950/80 border-b border-zinc-200/60 dark:border-zinc-800/60">
+  <nav class="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
+    <a href={lang === 'pl' ? '/pl/' : '/'} class="font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+      {lang === 'pl' ? 'Karol Zalewski' : 'Karol Zalewski'}
+    </a>
+
+    <div class="flex items-center gap-1 text-sm">
+      <a
+        href={lang === 'pl' ? '/pl/#about' : '/#about'}
+        class="px-3 py-2 rounded-md text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+      >
+        {t['nav.about']}
+      </a>
+      <a
+        href={lang === 'pl' ? '/pl/#contact' : '/#contact'}
+        class="px-3 py-2 rounded-md text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+      >
+        {t['nav.contact']}
+      </a>
+
+      <a
+        href={otherLangUrl}
+        hreflang={otherLang}
+        rel="alternate"
+        class="ml-1 px-2 py-1 rounded-md text-zinc-500 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors font-mono text-xs"
+        aria-label={`Switch language to ${otherLang.toUpperCase()}`}
+      >
+        {otherLang.toUpperCase()}
+      </a>
+
+      <ThemeToggle lang={lang} />
+    </div>
+  </nav>
+</header>
