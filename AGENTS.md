@@ -38,13 +38,15 @@ public/
 
 ## Deploy
 
-- Deploy is **manual**, from the build output: `dist/` is uploaded to `/cytrus/4zal.net/` on the server (Mikrus) with passwordless sudo.
+- Deploy is **manual**, from the build output: `dist/` is uploaded to `/cytrus/4zal.net/` on the server (Mikrus) with `sudo -n -u cytrus rsync` (NOPASSWD sudoers for rsync/cp/mv/mkdir/rm/chmod/chown/touch/install/tar/find — no tee, no shell).
+- Canonical rsync:
+  `sudo -n -u cytrus rsync -av --delete --exclude=".well-known" --exclude="@*" --exclude="*.asc" --exclude="mta-sts*" dist/ /cytrus/4zal.net/`
 - **CRITICAL:** the following production files/paths live outside the build and must NEVER be deleted or overwritten during deploy:
-  - `.well-known/` (webfinger, host-meta, nodeinfo — Mastodon/federated identity chain `@karol.zalewski@4zal.net` → `@kzzalews`)
-  - `@karol.zalewski` and other `@*` handles (PHP endpoints)
+  - `.well-known/` (webfinger.php, host-meta.php, nodeinfo.php, openpgpkey/, posh/ — federated identity chain `@karol.zalewski@4zal.net` → `@kzzalews@mastodon.social`)
+  - `@karol.zalewski.php`, `@marta.tyminska.php` (301 redirects to Mastodon profiles)
   - `*.asc` (PGP public key)
-- PHP 8.2 is active on the vhost and required for the identity endpoints — do not remove `.htaccess` or suggest migrating these to static files.
-- Server runs nginx with HSTS (`max-age=31536000`) and gzip enabled.
+- **Cytrus is pure nginx — `.htaccess` is NOT parsed** (verified 2026-06-24: mod_rewrite/mod_headers/AddType all inert). Do not create or rely on `.htaccess`; headers/redirects would have to go through the Mikrus panel or Cloudflare.
+- PHP IS executed by the vhost (webfinger.php etc. work), but extensionless URLs 404 — there are no rewrites.
 
 ## Conventions
 
