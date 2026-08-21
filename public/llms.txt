@@ -1,0 +1,16 @@
+# 4zal.net
+
+> Personal website of Karol Zalewski — software engineer interested in self-hosting, automation, AI agents and infrastructure. Bilingual static site (English default, Polish at /pl/), built with Astro 5 and Tailwind CSS 4. Lightweight by design (~170 KB total, no client-side frameworks).
+
+## Site
+
+- [Home (English)](https://4zal.net/): Main page — bio, projects, contact
+- [Strona główna (Polski)](https://4zal.net/pl/): Polish version of the site
+- [Sitemap](https://4zal.net/sitemap-index.xml): Full list of pages with lastmod dates
+- [RSS feed](https://4zal.net/rss.xml): Updates
+
+## Notes for agents
+
+- All content is static HTML — no JavaScript is required to read any page.
+- The `.well-known/` endpoints (webfinger, host-meta, nodeinfo) are fediverse identity files, not content pages; do not cite them as articles.
+- Contact and social links are on the home page; there is no contact form or API.
