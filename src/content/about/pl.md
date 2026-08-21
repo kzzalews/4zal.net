@@ -13,14 +13,14 @@ zamknę laptopa.
 Na co dzień jestem inżynierem oprogramowania w **Dynatrace**, gdzie
 problemy wyglądają zwykle tak: „spraw, żeby ta platforma na skalę
 petabajtów była szybsza, bardziej obserwowalna i trudniejsza do
-zepsucia". Wcześniej pracowałem w Intelsie przy platformie Autonomous
+zepsucia". Wcześniej pracowałem w Intelu przy platformie Autonomous
 Vehicle Data Center — budując uwierzytelnianie i autoryzację dla
 infrastruktury, która musi działać nawet gdy wszystko inne zawodzi.
 
 Po godzinach utrzymuję niewielki fleet usług self-hosted na
 [Mikrusie](https://mikr.us) — hobbystycznym dostawcy VPS, który daje
-znacznie więcej niż obiecuje. W tym [OpenClaw](https://github.com/openclaw/openclaw),
-runtime dla agentów AI, który współtworzę, oraz prywatną warstwę
+znacznie więcej niż obiecuje. W tym [OpenClaw](https://github.com/openclaw/openclaw) —
+runtime dla agentów AI, do którego dorzuciłem swoją cegiełkę, oraz prywatną warstwę
 pamięci Hindsight, która to wszystko spina.
 
 Jeśli coś tu napisanego jest użyteczne — forkuj. Jeśli coś jest nie tak,
