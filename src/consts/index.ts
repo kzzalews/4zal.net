@@ -60,6 +60,8 @@ export const UI = {
     'footer.copyright': 'All rights reserved.',
     'theme.toggle': 'Toggle theme',
     'lang.switch': 'Polski',
+    'lang.switchLabel': 'Switch language to Polish',
+    'skip': 'Skip to content',
   },
   pl: {
     'nav.about': 'O mnie',
@@ -71,7 +73,7 @@ export const UI = {
     'about.title': 'O mnie',
     'about.lead': 'Buduję rzeczy, które działają bez nadzoru.',
     'contact.title': 'Kontakt',
-    'contact.lead': 'Znajdziesz mnie na fediwersum, GitHubie albo napisz maila. Czytam wszystko; odpowiadam na większość.',
+    'contact.lead': 'Znajdziesz mnie na fediwersum i GitHubie albo możesz napisać maila. Czytam wszystko; odpowiadam na większość.',
     'contact.cta.email': 'Napisz maila',
     'contact.cta.mastodon': 'Mastodon',
     'contact.cta.github': 'GitHub',
@@ -80,6 +82,8 @@ export const UI = {
     'footer.copyright': 'Wszystkie prawa zastrzeżone.',
     'theme.toggle': 'Przełącz motyw',
     'lang.switch': 'English',
+    'lang.switchLabel': 'Przełącz język na angielski',
+    'skip': 'Przejdź do treści',
   },
 } as const;
 

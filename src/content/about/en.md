@@ -3,8 +3,6 @@ lang: en
 title: About
 ---
 
-I build things that run unattended.
-
 Most of my work lives at the intersection of cloud infrastructure and
 automation: orchestrating Kubernetes clusters at scale, wiring GitOps
 pipelines, and designing systems that stay healthy long after I close
