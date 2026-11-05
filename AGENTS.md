@@ -34,6 +34,7 @@ public/
   og-image.png
   robots.txt
   .well-known/        # webfinger, host-meta, nodeinfo — federated identity
+                      # autoconfig/mail/config-v1.1.xml — mail client autoconfig (Fastmail, OAuth2); live copy on server, deploy excludes .well-known
 ```
 
 ## Deploy
